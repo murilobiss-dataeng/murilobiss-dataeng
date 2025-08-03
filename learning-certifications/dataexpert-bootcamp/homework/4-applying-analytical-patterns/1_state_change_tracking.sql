@@ -1,6 +1,7 @@
 -- Query for state change tracking of players
 -- Tracks player career transitions using window functions
 
+
 WITH player_state_changes AS (
     SELECT 
         p.player_id,

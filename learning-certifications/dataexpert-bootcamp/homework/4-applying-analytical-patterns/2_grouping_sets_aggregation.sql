@@ -1,6 +1,7 @@
 -- Query using GROUPING SETS for efficient aggregations
 -- Multi-dimensional analysis of game_details data
 
+
 SELECT 
     COALESCE(p.player_name, 'ALL PLAYERS') as player_name,
     COALESCE(t.team_name, 'ALL TEAMS') as team_name,
