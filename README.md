@@ -1,4 +1,4 @@
-# 👋 Murilo Biss | Data Engineer
+# Murilo Biss | Data Engineer
 
 <div align="center">
 
@@ -85,7 +85,7 @@ Automotive sales analytics platform with comprehensive dimensional modeling and 
 <div align="center">
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect%20with%20Murilo-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/murilobiss/)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow%20@murilobiss-dataeng-black?style=for-the-badge&logo=github)](https://github.com/murilobiss-dataeng)
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?style=for-the-badge&logo=github)](https://github.com/murilobiss-dataeng)
 [![Email](https://img.shields.io/badge/Email-Get%20in%20Touch-red?style=for-the-badge&logo=gmail)](mailto:murilobiss@gmail.com)
 
 </div>
