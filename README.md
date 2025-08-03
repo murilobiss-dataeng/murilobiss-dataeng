@@ -16,7 +16,7 @@
 
 **Data Engineer** with 6+ years experience specializing in cloud platforms, big data processing, and modern data architectures.
 
-**Core Technologies**: AWS, Azure, Snowflake • Apache Spark, Airflow, Kafka • dbt, Delta Lake • Python, SQL, JavaScript • Docker, Kubernetes
+**Core Technologies**: AWS, Azure, Snowflake, Apache Spark, Airflow, Kafka, dbt, Delta Lake, Python, SQL, JavaScript, Docker, Kubernetes
 
 ## 📊 Portfolio Analytics
 
@@ -60,8 +60,11 @@ Automotive sales analytics platform with comprehensive dimensional modeling and 
 <div align="center">
 
 **99.9% Data Quality** across all pipelines
+
 **99.5% Pipeline Reliability** in production   
+
 **100K+ Events/Second** real-time streaming
+
 **Automated CI/CD** for all data pipelines
 
 </div>
