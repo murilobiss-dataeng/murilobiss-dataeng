@@ -3,7 +3,7 @@
 <div align="center">
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/murilobiss/)
-[![GitHub](https://img.shields.io/badge/GitHub-@murilobiss-dataeng-black?style=for-the-badge&logo=github)](https://github.com/murilobiss-dataeng)
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-black?style=for-the-badge&logo=github)](https://github.com/murilobiss-dataeng)
 [![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:murilobiss@gmail.com)
 
 *Transforming data into actionable insights with modern cloud technologies*
@@ -59,10 +59,10 @@ Automotive sales analytics platform with comprehensive dimensional modeling and 
 
 <div align="center">
 
-- **99.9% Data Quality** across all pipelines
-- **99.5% Pipeline Reliability** in production  
-- **100K+ Events/Second** real-time streaming
-- **Automated CI/CD** for all data pipelines
+**99.9% Data Quality** across all pipelines
+**99.5% Pipeline Reliability** in production   
+**100K+ Events/Second** real-time streaming
+**Automated CI/CD** for all data pipelines
 
 </div>
 
