@@ -1,0 +1,32 @@
+# Dependências
+node_modules/
+vendor/
+.env
+
+# Arquivos de build
+dist/
+build/
+*.pyc
+__pycache__/
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos de backup
+*.bak
+*.backup 
+# Currículo
+CV_Murilo_Biss.pdf 

@@ -1,0 +1,24 @@
+
+@startuml PedidoPagamento
+title Fluxo de Pedido + Pagamento
+
+actor Cliente
+entity "Pedido" as Pedido
+entity "Pagamento" as Pagamento
+control "PedidoController" as PedidoCtrl
+control "PagamentoController" as PagamentoCtrl
+database "Banco de Dados" as DB
+
+Cliente -> PedidoCtrl : Envia pedido (POST /api/pedidos)
+PedidoCtrl -> Pedido : Cria pedido com status "Recebido"
+Pedido -> DB : Salva pedido
+
+Cliente -> PagamentoCtrl : Solicita QR Code (POST /api/pagamentos/gerar-qrcode)
+PagamentoCtrl -> Pagamento : Gera QR Code fake
+Pagamento -> Cliente : Retorna URL do QR Code
+
+Cliente -> PagamentoCtrl : Confirma pagamento
+PagamentoCtrl -> Pagamento : Atualiza status para "Pago"
+Pagamento -> DB : Atualiza pedido como "Em preparação"
+
+@enduml

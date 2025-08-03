@@ -1,0 +1,24 @@
+
+@startuml PreparoEntrega
+title Fluxo de Preparo + Entrega
+
+actor Cozinha
+actor Cliente
+entity "Pedido" as Pedido
+control "PedidoController" as PedidoCtrl
+database "Banco de Dados" as DB
+
+Pedido -> DB : Status atual = "Recebido"
+Cozinha -> PedidoCtrl : Atualiza status para "Em preparação"
+PedidoCtrl -> Pedido : Pedido em preparação
+Pedido -> DB : Salva novo status
+
+Cozinha -> PedidoCtrl : Atualiza status para "Pronto"
+PedidoCtrl -> Pedido : Pedido pronto
+Pedido -> DB : Salva status "Pronto"
+
+Cliente -> PedidoCtrl : Retira pedido
+PedidoCtrl -> Pedido : Atualiza status para "Finalizado"
+Pedido -> DB : Finaliza pedido
+
+@enduml

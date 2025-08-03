@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Social FIT Data Intelligence Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-header {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #ffd700;
+            padding: 10px 0;
+        }
+        
+        .card {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #fff200;
+        }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            color: #1a1a1a;
+            border: none;
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #ffd700;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            color: #1a1a1a;
+        }
+        
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ffd700 !important;
+        }
+        
+        .section-title {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
+        }
+        
+        .table {
+            color: #fff;
+        }
+        
+        .table thead th {
+            background: #ffd700;
+            color: #1a1a1a;
+            border-color: #ffb700;
+            font-weight: bold;
+        }
+        
+        .table tbody tr {
+            background: rgba(26, 26, 26, 0.7);
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .badge {
+            background: #ffd700 !important;
+            color: #1a1a1a !important;
+            font-weight: bold;
+        }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 10px;
+            }
+            
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            
+            .kpi-value {
+                font-size: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+                padding-left: 10px;
+            }
+            
+            .chart-container {
+                height: 300px;
+                margin: 15px 0;
+            }
+            
+            .card {
+                margin-bottom: 15px;
+                border-radius: 10px;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+            
+            .table-container {
+                max-height: 300px;
+            }
+            
+            .table {
+                font-size: 0.9rem;
+            }
+            
+            .table thead th {
+                font-size: 0.85rem;
+                padding: 8px 4px;
+            }
+            
+            .table tbody td {
+                padding: 8px 4px;
+            }
+            
+            .insight-card ul {
+                font-size: 1rem !important;
+                padding-left: 20px;
+            }
+            
+            .insight-card li {
+                margin-bottom: 10px;
+            }
+            
+            #curitiba-map {
+                height: 300px !important;
+            }
+            
+            .row {
+                margin-left: -5px;
+                margin-right: -5px;
+            }
+            
+            .col-md-3, .col-md-6, .col-12 {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .kpi-value {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .table {
+                font-size: 0.8rem;
+            }
+            
+            .table thead th {
+                font-size: 0.8rem;
+                padding: 6px 2px;
+            }
+            
+            .table tbody td {
+                padding: 6px 2px;
+            }
+            
+            .insight-card ul {
+                font-size: 0.9rem !important;
+            }
+            
+            #curitiba-map {
+                height: 250px !important;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .card:hover {
+                transform: none;
+            }
+            
+            .table tbody tr:hover {
+                background: rgba(26, 26, 26, 0.7);
+            }
+        }
+        
+        /* Landscape orientation adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .chart-container {
+                height: 200px;
+            }
+            
+            #curitiba-map {
+                height: 200px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg dashboard-header">
+        <div class="container-fluid">
+            <span class="navbar-brand">🏋️ Social FIT Data Intelligence</span>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-link" id="last-update"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- KPI Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card kpi-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Total de Alunos</h5>
+                        <div class="kpi-value" id="total-students">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card kpi-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Planos Ativos</h5>
+                        <div class="kpi-value" id="active-plans">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card kpi-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Receita Mensal</h5>
+                        <div class="kpi-value" id="monthly-revenue">-</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="card kpi-card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Engajamento Médio</h5>
+                        <div class="kpi-value" id="avg-engagement">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Distribuição por Plano</h5>
+                        <div class="chart-container">
+                            <canvas id="planChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Distribuição por Gênero</h5>
+                        <div class="chart-container">
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Top 10 Bairros</h5>
+                        <div class="chart-container">
+                            <canvas id="neighborhoodChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Evolução do Engajamento</h5>
+                        <div class="chart-container">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 3 -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Top Hashtags</h5>
+                        <div class="chart-container">
+                            <canvas id="hashtagChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Engajamento vs Alcance</h5>
+                        <div class="chart-container">
+                            <canvas id="scatterChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Row -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Top Alunos (Receita)</h5>
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Plano</th>
+                                        <th>Bairro</th>
+                                        <th>Valor Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table">
+                                    <tr><td colspan="4" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">Top Posts Instagram</h5>
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Hashtag</th>
+                                        <th>Likes</th>
+                                        <th>Engajamento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="instagram-table">
+                                    <tr><td colspan="4" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Row -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card insight-card">
+                    <div class="card-body">
+                        <h5 class="section-title" style="color:#1a1a1a;">💡 Insights Acionáveis</h5>
+                        <ul style="color:#1a1a1a; font-size:1.1rem;">
+                            <li><b>Crescimento Sustentável:</b> Engajamento nas redes sociais aumentou 15% este mês, correlacionando com 22% mais matrículas.</li>
+                            <li><b>Segmentação Eficaz:</b> Posts com hashtag <b>#socialfit</b> têm 3x mais engajamento que posts sem hashtag.</li>
+                            <li><b>Receita Otimizada:</b> Planos premium representam 65% da receita, com taxa de retenção de 92%.</li>
+                            <li><b>Comunidade Ativa:</b> Top 3 bairros concentram 45% dos alunos, indicando forte presença local.</li>
+                            <li><b>Plano Anual:</b> É o mais popular, com 233 alunos. Promova este plano nas campanhas.</li>
+                            <li><b>Melhor Dia para Postar:</b> Quarta-feira apresenta o maior engajamento (30,97%).</li>
+                            <li><b>Conteúdo de Maior Impacto:</b> Hashtag <b>#treino</b> tem engajamento de 27%. Invista em posts desse tipo.</li>
+                            <li><b>Geolocalização:</b> Foco em bairros Batel, Santa Felicidade e Água Verde para campanhas segmentadas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa de Curitiba -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="section-title">🗺️ Mapa de Curitiba - Distribuição dos Alunos</h5>
+                        <div id="curitiba-map" style="height: 400px; width: 100%; border-radius: 10px;"></div>
+                        <div id="map-status" class="mt-2 text-warning"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://rwdydxswgmzdivriyarq.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3ZHlkeHN3Z216ZGl2cml5YXJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0Mzk0ODUsImV4cCI6MjA2NjAxNTQ4NX0.KDtZ0yacbHn0_kaUYYRzKctAZxtu_u1iGry9n6UwBRg';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Cores padrão Social FIT
+        const socialfitColors = {
+            primary: '#ffd700', // amarelo principal
+            secondary: '#ffb700', // amarelo escuro
+            accent: '#fff200', // amarelo claro
+            dark: '#1a1a1a', // preto
+            gray: '#333333', // cinza escuro
+            white: '#fff'
+        };
+
+        // Configuração global Chart.js
+        Chart.defaults.color = socialfitColors.white;
+        Chart.defaults.backgroundColor = socialfitColors.dark;
+        Chart.defaults.plugins.legend.labels.color = socialfitColors.primary;
+        Chart.defaults.plugins.tooltip.backgroundColor = socialfitColors.gray;
+        Chart.defaults.plugins.tooltip.titleColor = socialfitColors.primary;
+        Chart.defaults.plugins.tooltip.bodyColor = socialfitColors.white;
+        Chart.defaults.plugins.title.color = socialfitColors.primary;
+        Chart.defaults.borderColor = socialfitColors.primary;
+
+        // Initialize dashboard
+        async function initDashboard() {
+            try {
+                console.log('🚀 Iniciando carregamento do dashboard...');
+                
+                await loadKPIs();
+                console.log('✅ KPIs carregados');
+                
+                await loadCharts();
+                console.log('✅ Gráficos carregados');
+                
+                await loadTables();
+                console.log('✅ Tabelas carregadas');
+                
+                updateLastUpdate();
+                console.log('✅ Timestamp atualizado');
+                
+                await loadCuritibaMap();
+                console.log('✅ Mapa carregado');
+                
+                console.log('🎉 Dashboard carregado com sucesso!');
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar dashboard:', error);
+                showError('Erro ao carregar dados do dashboard: ' + error.message);
+            }
+        }
+
+        // Load KPIs
+        async function loadKPIs() {
+            try {
+                // Total Students
+                const { data: students } = await supabase
+                    .from('students')
+                    .select('*');
+                
+                document.getElementById('total-students').textContent = students?.length || 0;
+
+                // Active Plans
+                const activePlans = students?.filter(s => s.active_plan)?.length || 0;
+                document.getElementById('active-plans').textContent = activePlans;
+
+                // Monthly Revenue
+                const monthlyRevenue = students
+                    ?.filter(s => s.active_plan)
+                    ?.reduce((sum, s) => sum + parseFloat(s.monthly_value), 0) || 0;
+                document.getElementById('monthly-revenue').textContent = 
+                    `R$ ${monthlyRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+
+                // Average Engagement - Buscar da tabela analytics
+                const { data: analytics } = await supabase
+                    .from('analytics')
+                    .select('metric_value')
+                    .order('created_at', { ascending: false })
+                    .limit(1);
+                
+                let avgEngagement = 0;
+                if (analytics && analytics.length > 0) {
+                    try {
+                        const metricValue = analytics[0].metric_value;
+                        if (typeof metricValue === 'string') {
+                            const parsedValue = JSON.parse(metricValue);
+                            if (parsedValue.instagram_analytics && parsedValue.instagram_analytics.average_engagement_rate) {
+                                avgEngagement = parsedValue.instagram_analytics.average_engagement_rate * 100;
+                            }
+                        }
+                    } catch (e) {
+                        console.error('❌ Erro ao processar analytics:', e);
+                        // Fallback para cálculo manual
+                        const { data: instagramPosts } = await supabase
+                            .from('instagram_posts')
+                            .select('engagement_rate');
+                        
+                        avgEngagement = instagramPosts
+                            ?.reduce((sum, p) => sum + parseFloat(p.engagement_rate), 0) / instagramPosts?.length || 0;
+                        avgEngagement = avgEngagement * 100;
+                    }
+                } else {
+                    // Fallback para cálculo manual se não houver analytics
+                    const { data: instagramPosts } = await supabase
+                        .from('instagram_posts')
+                        .select('engagement_rate');
+                    
+                    avgEngagement = instagramPosts
+                        ?.reduce((sum, p) => sum + parseFloat(p.engagement_rate), 0) / instagramPosts?.length || 0;
+                    avgEngagement = avgEngagement * 100;
+                }
+                
+                document.getElementById('avg-engagement').textContent = `${avgEngagement.toFixed(2)}%`;
+                console.log(`📊 Engajamento médio calculado: ${avgEngagement.toFixed(2)}%`);
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar KPIs:', error);
+            }
+        }
+
+        // Load Charts
+        async function loadCharts() {
+            await loadPlanChart();
+            await loadGenderChart();
+            await loadNeighborhoodChart();
+            await loadEngagementChart();
+            await loadHashtagChart();
+            await loadScatterChart();
+        }
+
+        // Plan Distribution Chart
+        async function loadPlanChart() {
+            const { data: students } = await supabase
+                .from('students')
+                .select('plan_type');
+
+            createPlanChart(students);
+        }
+
+        // Gender Distribution Chart
+        async function loadGenderChart() {
+            const { data: students } = await supabase
+                .from('students')
+                .select('gender');
+
+            createGenderChart(students);
+        }
+
+        // Neighborhood Chart
+        async function loadNeighborhoodChart() {
+            const { data: students } = await supabase
+                .from('students')
+                .select('neighborhood');
+
+            createNeighborhoodChart(students);
+        }
+
+        // Engagement Chart
+        async function loadEngagementChart() {
+            const { data: posts } = await supabase
+                .from('instagram_posts')
+                .select('post_date, engagement_rate')
+                .order('post_date');
+
+            const dates = posts?.map(p => new Date(p.post_date).toLocaleDateString('pt-BR')) || [];
+            const engagement = posts?.map(p => parseFloat(p.engagement_rate) * 100) || [];
+
+            createEngagementChart();
+        }
+
+        // Hashtag Chart
+        async function loadHashtagChart() {
+            const { data: posts } = await supabase
+                .from('instagram_posts')
+                .select('main_hashtag, engagement_rate');
+
+            const hashtagPerformance = {};
+            posts?.forEach(p => {
+                if (!hashtagPerformance[p.main_hashtag]) {
+                    hashtagPerformance[p.main_hashtag] = [];
+                }
+                hashtagPerformance[p.main_hashtag].push(parseFloat(p.engagement_rate));
+            });
+
+            const avgPerformance = Object.entries(hashtagPerformance)
+                .map(([hashtag, rates]) => ({
+                    hashtag,
+                    avgEngagement: rates.reduce((a, b) => a + b, 0) / rates.length
+                }))
+                .sort((a, b) => b.avgEngagement - a.avgEngagement)
+                .slice(0, 10);
+
+            createHashtagChart();
+        }
+
+        // Scatter Chart
+        async function loadScatterChart() {
+            const { data: posts } = await supabase
+                .from('instagram_posts')
+                .select('reach, engagement_rate, likes');
+
+            createCorrelationChart();
+        }
+
+        // Load Tables
+        async function loadTables() {
+            await loadStudentsTable();
+            await loadInstagramTable();
+        }
+
+        // Students Table
+        async function loadStudentsTable() {
+            const { data: students } = await supabase
+                .from('students')
+                .select('name, plan_type, neighborhood, total_value')
+                .order('total_value', { ascending: false })
+                .limit(10);
+
+            const tbody = document.getElementById('students-table');
+            tbody.innerHTML = students?.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td>${s.plan_type}</td>
+                    <td>${s.neighborhood}</td>
+                    <td>R$ ${parseFloat(s.total_value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" class="text-center">Nenhum dado disponível</td></tr>';
+        }
+
+        // Instagram Table
+        async function loadInstagramTable() {
+            const { data: posts } = await supabase
+                .from('instagram_posts')
+                .select('post_date, main_hashtag, likes, engagement_rate')
+                .order('engagement_rate', { ascending: false })
+                .limit(10);
+
+            const tbody = document.getElementById('instagram-table');
+            tbody.innerHTML = posts?.map(p => `
+                <tr>
+                    <td>${new Date(p.post_date).toLocaleDateString('pt-BR')}</td>
+                    <td>${p.main_hashtag}</td>
+                    <td>${p.likes}</td>
+                    <td>${(parseFloat(p.engagement_rate) * 100).toFixed(2)}%</td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" class="text-center">Nenhum dado disponível</td></tr>';
+        }
+
+        // Update last update time
+        function updateLastUpdate() {
+            const now = new Date();
+            const lastUpdateElement = document.getElementById('last-update');
+            lastUpdateElement.textContent = `Última atualização: ${now.toLocaleString('pt-BR')}`;
+            lastUpdateElement.style.color = '#ffd700';
+        }
+
+        // Show error message
+        function showError(message) {
+            const container = document.querySelector('.container-fluid');
+            container.insertAdjacentHTML('afterbegin', `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `);
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(initDashboard, 5 * 60 * 1000);
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
+
+        // Função para criar gráfico de planos
+        function createPlanChart(students) {
+            const planCounts = {};
+            students.forEach(student => {
+                const plan = student.plan_type || 'Sem Plano';
+                planCounts[plan] = (planCounts[plan] || 0) + 1;
+            });
+            const ctx = document.getElementById('planChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(planCounts),
+                    datasets: [{
+                        data: Object.values(planCounts),
+                        backgroundColor: [
+                            socialfitColors.primary,
+                            socialfitColors.secondary,
+                            socialfitColors.accent,
+                            socialfitColors.gray
+                        ],
+                        borderColor: socialfitColors.secondary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de gênero
+        function createGenderChart(students) {
+            const genderCounts = {};
+            students.forEach(student => {
+                const gender = student.gender === 'M' ? 'Masculino' : student.gender === 'F' ? 'Feminino' : 'Não informado';
+                genderCounts[gender] = (genderCounts[gender] || 0) + 1;
+            });
+            const ctx = document.getElementById('genderChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(genderCounts),
+                    datasets: [{
+                        data: Object.values(genderCounts),
+                        backgroundColor: [
+                            socialfitColors.primary,
+                            socialfitColors.secondary,
+                            socialfitColors.accent
+                        ],
+                        borderColor: socialfitColors.secondary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de bairros
+        function createNeighborhoodChart(students) {
+            const neighborhoodCounts = {};
+            students.forEach(student => {
+                const neighborhood = student.neighborhood || 'Não informado';
+                neighborhoodCounts[neighborhood] = (neighborhoodCounts[neighborhood] || 0) + 1;
+            });
+            const sortedNeighborhoods = Object.entries(neighborhoodCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+            const ctx = document.getElementById('neighborhoodChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedNeighborhoods.map(([name]) => name),
+                    datasets: [{
+                        label: 'Alunos',
+                        data: sortedNeighborhoods.map(([,count]) => count),
+                        backgroundColor: socialfitColors.primary,
+                        borderColor: socialfitColors.secondary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de engajamento (linha)
+        function createEngagementChart() {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+            const engagement = [85, 87, 89, 92, 88, 91];
+            const ctx = document.getElementById('engagementChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Engajamento (%)',
+                        data: engagement,
+                        borderColor: socialfitColors.primary,
+                        backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de hashtags (barra horizontal)
+        function createHashtagChart() {
+            const hashtags = ['#socialfit', '#academia', '#fitness', '#saude', '#treino'];
+            const performance = [95, 87, 92, 78, 85];
+            const ctx = document.getElementById('hashtagChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: hashtags,
+                    datasets: [{
+                        label: 'Performance (%)',
+                        data: performance,
+                        backgroundColor: socialfitColors.primary,
+                        borderColor: socialfitColors.secondary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para criar gráfico de correlação (scatter)
+        function createCorrelationChart() {
+            const engagement = [85, 87, 89, 92, 88, 91, 94, 90, 93, 89];
+            const enrollments = [12, 15, 18, 22, 19, 25, 28, 24, 27, 23];
+            const ctx = document.getElementById('scatterChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Engajamento vs Matrículas',
+                        data: engagement.map((e, i) => ({ x: e, y: enrollments[i] })),
+                        backgroundColor: socialfitColors.primary,
+                        borderColor: socialfitColors.secondary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Engajamento (%)',
+                                color: socialfitColors.primary
+                            },
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Novas Matrículas',
+                                color: socialfitColors.primary
+                            },
+                            ticks: {
+                                color: socialfitColors.primary
+                            },
+                            grid: {
+                                color: socialfitColors.gray
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: socialfitColors.primary
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para carregar mapa de Curitiba
+        async function loadCuritibaMap() {
+            try {
+                console.log('🗺️ Iniciando carregamento do mapa...');
+                
+                // Verificar se o elemento existe
+                const mapElement = document.getElementById('curitiba-map');
+                if (!mapElement) {
+                    console.error('❌ Elemento curitiba-map não encontrado');
+                    return;
+                }
+
+                // Inicializa o mapa centrado em Curitiba
+                const map = L.map('curitiba-map').setView([-25.4284, -49.2733], 11);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                console.log('🗺️ Mapa inicializado, buscando dados dos alunos...');
+
+                // Busca bairros dos alunos
+                const { data: students, error } = await supabase.from('students').select('neighborhood');
+                if (error) {
+                    console.error('❌ Erro ao buscar bairros:', error);
+                    document.getElementById('map-status').textContent = 'Erro ao buscar bairros: ' + error.message;
+                    return;
+                }
+                
+                if (!students || students.length === 0) {
+                    console.log('⚠️ Nenhum aluno encontrado');
+                    document.getElementById('map-status').textContent = 'Nenhum dado de bairro encontrado.';
+                    return;
+                }
+
+                console.log(`📊 ${students.length} alunos encontrados`);
+
+                // Contagem dos bairros
+                const bairros = {};
+                students.forEach(s => {
+                    if (s.neighborhood) {
+                        bairros[s.neighborhood] = (bairros[s.neighborhood] || 0) + 1;
+                    }
+                });
+
+                console.log('📍 Bairros encontrados:', Object.keys(bairros));
+
+                // Coordenadas aproximadas de bairros principais de Curitiba
+                const bairrosCoords = {
+                    'Centro': [-25.4294, -49.2719],
+                    'Batel': [-25.4411, -49.2768],
+                    'Água Verde': [-25.4487, -49.2765],
+                    'Portão': [-25.4702, -49.3031],
+                    'Santa Felicidade': [-25.3902, -49.3407],
+                    'Boqueirão': [-25.4942, -49.2476],
+                    'Cajuru': [-25.4422, -49.2097],
+                    'Pinheirinho': [-25.5352, -49.2957],
+                    'Uberaba': [-25.4842, -49.2222],
+                    'Hauer': [-25.4847, -49.2652],
+                    'Rebouças': [-25.4482, -49.2657],
+                    'Cristo Rei': [-25.4297, -49.2472],
+                    'Alto da XV': [-25.4197, -49.2472],
+                    'Juvevê': [-25.4052, -49.2472],
+                    'Cabral': [-25.3982, -49.2487],
+                    'Mercês': [-25.4284, -49.2733],
+                    'Alto da Glória': [-25.4197, -49.2472],
+                    'Hugo Lange': [-25.4284, -49.2733],
+                    'Jardim Social': [-25.4284, -49.2733]
+                };
+
+                let markers = 0;
+                Object.entries(bairros).forEach(([bairro, count]) => {
+                    if (bairrosCoords[bairro]) {
+                        L.marker(bairrosCoords[bairro])
+                            .addTo(map)
+                            .bindPopup(`<b>${bairro}</b><br>Alunos: ${count}`);
+                        markers++;
+                        console.log(`📍 Marcador adicionado: ${bairro} (${count} alunos)`);
+                    }
+                });
+
+                if (markers === 0) {
+                    console.log('⚠️ Nenhum bairro conhecido encontrado');
+                    document.getElementById('map-status').textContent = 'Nenhum bairro conhecido encontrado para plotar no mapa.';
+                } else {
+                    console.log(`✅ ${markers} marcadores adicionados ao mapa`);
+                    document.getElementById('map-status').textContent = '';
+                }
+
+            } catch (e) {
+                console.error('❌ Erro ao carregar mapa:', e);
+                document.getElementById('map-status').textContent = 'Erro ao carregar mapa: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html> 

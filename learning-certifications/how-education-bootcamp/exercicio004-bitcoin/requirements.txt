@@ -1,0 +1,7 @@
+pytest
+pytest-cov
+datetime
+schedule 
+requests 
+backoff
+typing

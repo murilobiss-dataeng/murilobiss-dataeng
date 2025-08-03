@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastfood-postgres
+  namespace: fastfood
+  labels:
+    app: fastfood-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastfood-postgres
+  template:
+    metadata:
+      labels:
+        app: fastfood-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "fastfood"
+        - name: POSTGRES_USER
+          value: "postech"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: fastfood-secrets
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: init-scripts
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: fastfood-postgres-pvc
+      - name: init-scripts
+        configMap:
+          name: fastfood-init-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastfood-postgres-service
+  namespace: fastfood
+spec:
+  selector:
+    app: fastfood-postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+  type: ClusterIP 

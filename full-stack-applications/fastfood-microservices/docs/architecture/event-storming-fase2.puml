@@ -1,0 +1,168 @@
+@startuml Event Storming - Fase 2
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+title Event Storming - Sistema de Autoatendimento Fast Food - Fase 2
+
+' Definição de cores
+!define COMMAND_COLOR #FF6B6B
+!define EVENT_COLOR #4ECDC4
+!define POLICY_COLOR #45B7D1
+!define AGGREGATE_COLOR #96CEB4
+!define EXTERNAL_COLOR #FFEAA7
+!define READ_MODEL_COLOR #DDA0DD
+
+' Comandos (Commands)
+rectangle "Cliente Seleciona Produtos" as C1 COMMAND_COLOR
+rectangle "Cliente Confirma Pedido" as C2 COMMAND_COLOR
+rectangle "Sistema Gera QR Code" as C3 COMMAND_COLOR
+rectangle "Cliente Escaneia QR Code" as C4 COMMAND_COLOR
+rectangle "Mercado Pago Processa Pagamento" as C5 COMMAND_COLOR
+rectangle "Cozinha Inicia Preparo" as C6 COMMAND_COLOR
+rectangle "Cozinha Finaliza Preparo" as C7 COMMAND_COLOR
+rectangle "Cliente Retira Pedido" as C8 COMMAND_COLOR
+rectangle "Cliente Cancela Pedido" as C9 COMMAND_COLOR
+rectangle "Sistema Atualiza Estoque" as C10 COMMAND_COLOR
+rectangle "Admin Gerencia Produtos" as C11 COMMAND_COLOR
+rectangle "Admin Gerencia Clientes" as C12 COMMAND_COLOR
+
+' Eventos (Events)
+rectangle "Produtos Selecionados" as E1 EVENT_COLOR
+rectangle "Pedido Criado" as E2 EVENT_COLOR
+rectangle "QR Code Gerado" as E3 EVENT_COLOR
+rectangle "Pagamento Pendente" as E4 EVENT_COLOR
+rectangle "Pagamento Aprovado" as E5 EVENT_COLOR
+rectangle "Pagamento Rejeitado" as E6 EVENT_COLOR
+rectangle "Pedido Em Preparação" as E7 EVENT_COLOR
+rectangle "Pedido Pronto" as E8 EVENT_COLOR
+rectangle "Pedido Entregue" as E9 EVENT_COLOR
+rectangle "Pedido Cancelado" as E10 EVENT_COLOR
+rectangle "Estoque Atualizado" as E11 EVENT_COLOR
+rectangle "Produto Criado/Atualizado" as E12 EVENT_COLOR
+rectangle "Cliente Criado/Atualizado" as E13 EVENT_COLOR
+rectangle "Estoque Insuficiente" as E14 EVENT_COLOR
+rectangle "Cliente Inativo" as E15 EVENT_COLOR
+
+' Policies (Regras de Negócio)
+rectangle "Validar Quantidade Máxima (20 itens)" as P1 POLICY_COLOR
+rectangle "Validar Estoque Disponível" as P2 POLICY_COLOR
+rectangle "Validar CPF" as P3 POLICY_COLOR
+rectangle "Validar Email" as P4 POLICY_COLOR
+rectangle "Validar Preço Máximo (R$ 1000)" as P5 POLICY_COLOR
+rectangle "Validar Transição de Status" as P6 POLICY_COLOR
+rectangle "Calcular Total do Pedido" as P7 POLICY_COLOR
+rectangle "Verificar Cliente Ativo" as P8 POLICY_COLOR
+rectangle "Ordenar Pedidos por Prioridade" as P9 POLICY_COLOR
+rectangle "Validar Quantidade por Item (máx 50)" as P10 POLICY_COLOR
+
+' Aggregates
+rectangle "Pedido" as A1 AGGREGATE_COLOR
+rectangle "Cliente" as A2 AGGREGATE_COLOR
+rectangle "Produto" as A3 AGGREGATE_COLOR
+rectangle "Pagamento" as A4 AGGREGATE_COLOR
+rectangle "Categoria" as A5 AGGREGATE_COLOR
+
+' External Systems
+rectangle "Mercado Pago" as EX1 EXTERNAL_COLOR
+rectangle "Sistema de Estoque" as EX2 EXTERNAL_COLOR
+rectangle "Monitor da Cozinha" as EX3 EXTERNAL_COLOR
+rectangle "Totem de Autoatendimento" as EX4 EXTERNAL_COLOR
+
+' Read Models
+rectangle "Lista de Produtos" as RM1 READ_MODEL_COLOR
+rectangle "Status do Pedido" as RM2 READ_MODEL_COLOR
+rectangle "Pedidos em Aberto" as RM3 READ_MODEL_COLOR
+rectangle "Relatório de Vendas" as RM4 READ_MODEL_COLOR
+
+' Fluxo Principal
+C1 --> E1
+E1 --> P1
+E1 --> P2
+P1 --> C2
+P2 --> C2
+
+C2 --> E2
+E2 --> A1
+E2 --> P7
+P7 --> C3
+
+C3 --> E3
+E3 --> C4
+
+C4 --> E4
+E4 --> C5
+
+C5 --> E5
+E5 --> C6
+C5 --> E6
+E6 --> C9
+
+C6 --> E7
+E7 --> EX3
+E7 --> P6
+
+C7 --> E8
+E8 --> EX3
+E8 --> P6
+
+C8 --> E9
+E9 --> A1
+E9 --> C10
+
+C10 --> E11
+E11 --> EX2
+
+' Fluxos Alternativos
+C9 --> E10
+E10 --> A1
+E10 --> P6
+
+E14 --> C9
+E15 --> C9
+
+' Fluxos Administrativos
+C11 --> E12
+E12 --> A3
+E12 --> P5
+
+C12 --> E13
+E13 --> A2
+E13 --> P3
+E13 --> P4
+
+' Policies de Validação
+P2 --> E14
+P8 --> E15
+P6 --> E7
+P6 --> E8
+P6 --> E9
+P6 --> E10
+
+' Read Models
+A1 --> RM2
+A1 --> RM3
+A3 --> RM1
+A1 --> RM4
+
+' External Systems Integration
+EX1 --> E5
+EX1 --> E6
+EX2 --> P2
+EX3 --> E7
+EX3 --> E8
+EX4 --> C1
+EX4 --> C2
+
+' Layout
+A1 -[hidden]down- A2
+A2 -[hidden]down- A3
+A3 -[hidden]down- A4
+A4 -[hidden]down- A5
+
+EX1 -[hidden]down- EX2
+EX2 -[hidden]down- EX3
+EX3 -[hidden]down- EX4
+
+@enduml 

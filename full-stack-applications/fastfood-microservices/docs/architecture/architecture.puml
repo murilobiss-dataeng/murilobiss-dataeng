@@ -1,0 +1,93 @@
+@startuml Arquitetura do Sistema
+
+!define RECTANGLE class
+
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+
+
+skinparam rectangle {
+    BackgroundColor white
+    BorderColor black
+    ArrowColor black
+}
+
+title Arquitetura do Sistema - Tech Challenge - Fase 1
+
+package "Frontend" {
+    [Interface do Cliente] as ClientUI
+    [Interface Administrativa] as AdminUI
+}
+
+package "Backend" {
+    package "API Layer" {
+        [FastAPI] as API
+    }
+
+    package "Documentation" {
+        [Swagger UI] as Swagger
+    }
+
+    package "Application Layer" {
+        [Controllers] as Controllers
+        [Serviços de Aplicação] as AppServices
+    }
+
+    package "DTOs" {
+        [DTO Models] as DtoModels
+    }
+
+    package "Domain Layer" {
+        [Entidades] as Entities
+        [Objetos de Valor] as VOs
+        [Serviços de Domínio] as DomainServices
+    }
+
+    package "Infrastructure Layer" {
+        [Repositórios] as Repositories
+        [Banco de Dados] as DB
+        [Serviços Externos] as ExternalServices
+        [Fila de Pedidos (via DB)] as PedidoQueue
+    }
+}
+
+database "PostgreSQL" {
+    [tech_challenge] as Database
+}
+
+cloud "Mercado Pago" {
+    [API de Pagamento] as MercadoPago
+}
+
+' Relacionamentos
+ClientUI --> API
+AdminUI --> API
+API --> Controllers
+API --> Swagger
+Controllers --> AppServices
+Controllers --> DtoModels
+AppServices --> DomainServices
+AppServices --> Repositories
+AppServices --> PedidoQueue
+AppServices --> ExternalServices
+Repositories --> Database
+ExternalServices --> MercadoPago
+
+note right of API
+  Endpoints REST
+  - /api/v1/clientes
+  - /api/v1/produtos
+  - /api/v1/pedidos
+  - /api/v1/pagamentos
+end note
+
+note right of Database
+  Tabelas principais:
+  - clientes
+  - produtos
+  - pedidos
+  - categorias
+  - pagamentos
+end note
+
+@enduml

@@ -1,0 +1,36 @@
+# Social FIT Data Intelligence POC - Environment Configuration
+# Copy this file to .env and fill in your actual values
+
+# Supabase Configuration
+SUPABASE_URL=your_supabase_project_url_here
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+SUPABASE_ANON_KEY=your_supabase_anon_key_here
+
+# Database Configuration
+DATABASE_URL=your_database_connection_string_here
+
+# Application Configuration
+DEBUG=True
+LOG_LEVEL=INFO
+
+# Data Source Configuration
+STUDENTS_CSV_PATH=data/social_fit_alunos.csv
+INSTAGRAM_CSV_PATH=data/social_fit_instagram.csv
+
+# Analytics Configuration
+ANALYTICS_CACHE_TTL=3600
+ANALYTICS_UPDATE_INTERVAL=300
+
+# Dashboard Configuration
+DASHBOARD_HOST=localhost
+DASHBOARD_PORT=8050
+DASHBOARD_DEBUG=True
+
+# Security Configuration
+SECRET_KEY=your_secret_key_here
+ENCRYPTION_KEY=your_encryption_key_here
+
+# Social FIT Business Information
+GYM_NAME=Social FIT
+GYM_CNPJ=50.056.362/0001-72
+GYM_ADDRESS=Avenida Nossa Senhora da Luz 850 - Cabral, Curitiba/PR - CEP: 82510-020 

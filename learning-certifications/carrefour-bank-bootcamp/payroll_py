@@ -1,0 +1,10 @@
+emp_no = int(input())
+
+worked_hours = int(input())
+
+receives_per_worked_hour = float(input())
+
+salary = receives_per_worked_hour * worked_hours
+salary = round(salary,2)
+print("NUMBER =",emp_no,end="\n")
+print("SALARY = U$ %0.2f"%salary,end="\n")

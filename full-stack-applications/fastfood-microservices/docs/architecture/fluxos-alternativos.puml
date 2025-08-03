@@ -1,0 +1,124 @@
+@startuml Fluxos Alternativos
+title Fluxos Alternativos - Sistema de Autoatendimento Fast Food
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 10
+
+actor Cliente
+actor Cozinha
+actor Admin
+participant "Totem" as Totem
+participant "API" as API
+participant "Banco" as DB
+participant "Mercado Pago" as MP
+participant "Monitor" as Monitor
+
+== Fluxo Principal (Sucesso) ==
+Cliente -> Totem: Seleciona produtos
+Totem -> API: POST /pedidos/checkout
+API -> DB: Salva pedido
+API -> Totem: Retorna ID do pedido
+Totem -> API: GET /pagamento/qrcode
+API -> Totem: Retorna QR Code
+Cliente -> MP: Escaneia QR Code
+MP -> API: POST /pagamento/webhook (approved)
+API -> DB: Atualiza status para "Em preparação"
+API -> Monitor: Notifica cozinha
+Cozinha -> API: PATCH /pedidos/{id}/status (Pronto)
+API -> DB: Atualiza status
+API -> Monitor: Atualiza display
+Cliente -> Totem: Retira pedido
+Totem -> API: PATCH /pedidos/{id}/status (Finalizado)
+API -> DB: Finaliza pedido
+
+== Fluxo Alternativo 1: Pagamento Rejeitado ==
+Cliente -> Totem: Seleciona produtos
+Totem -> API: POST /pedidos/checkout
+API -> DB: Salva pedido
+Totem -> API: GET /pagamento/qrcode
+API -> Totem: Retorna QR Code
+Cliente -> MP: Escaneia QR Code
+MP -> API: POST /pagamento/webhook (rejected)
+API -> DB: Atualiza status para "Cancelado"
+API -> Totem: Notifica erro de pagamento
+Totem -> Cliente: Exibe mensagem de erro
+
+== Fluxo Alternativo 2: Estoque Insuficiente ==
+Cliente -> Totem: Seleciona produtos
+Totem -> API: POST /pedidos/checkout
+API -> DB: Verifica estoque
+note right: Estoque insuficiente
+API -> Totem: Retorna erro 422
+Totem -> Cliente: Exibe "Produto indisponível"
+
+== Fluxo Alternativo 3: Cliente Inativo ==
+Cliente -> Totem: Tenta fazer pedido
+Totem -> API: POST /pedidos/checkout
+API -> DB: Verifica cliente
+note right: Cliente inativo
+API -> Totem: Retorna erro 403
+Totem -> Cliente: Exibe "Cliente inativo"
+
+== Fluxo Alternativo 4: Cancelamento de Pedido ==
+Cliente -> Totem: Cancela pedido
+Totem -> API: DELETE /pedidos/{id}
+API -> DB: Verifica se pode cancelar
+note right: Apenas pedidos em "Recebido" ou "Pago"
+API -> DB: Atualiza status para "Cancelado"
+API -> DB: Libera estoque
+API -> Totem: Confirma cancelamento
+
+== Fluxo Alternativo 5: Timeout de Pagamento ==
+Cliente -> Totem: Seleciona produtos
+Totem -> API: POST /pedidos/checkout
+API -> DB: Salva pedido
+Totem -> API: GET /pagamento/qrcode
+API -> Totem: Retorna QR Code
+note right: Cliente não paga em 15 minutos
+API -> DB: Cancela pedido automaticamente
+API -> DB: Libera estoque
+API -> Monitor: Remove do display
+
+== Fluxo Alternativo 6: Erro na Cozinha ==
+Cozinha -> API: PATCH /pedidos/{id}/status (Em preparação)
+API -> DB: Atualiza status
+note right: Problema na cozinha
+Cozinha -> API: PATCH /pedidos/{id}/status (Cancelado)
+API -> DB: Cancela pedido
+API -> DB: Libera estoque
+API -> Monitor: Remove do display
+API -> Totem: Notifica cancelamento
+
+== Fluxo Alternativo 7: Cliente Não Retira ==
+Cozinha -> API: PATCH /pedidos/{id}/status (Pronto)
+API -> DB: Atualiza status
+API -> Monitor: Atualiza display
+note right: Cliente não retira em 30 minutos
+API -> DB: Finaliza pedido automaticamente
+API -> Monitor: Remove do display
+
+== Fluxo Alternativo 8: Validações de Domínio ==
+Cliente -> Totem: Tenta pedido inválido
+Totem -> API: POST /pedidos/checkout
+note right: Mais de 20 itens ou quantidade > 50
+API -> Totem: Retorna erro 422
+Totem -> Cliente: Exibe erro de validação
+
+== Fluxo Alternativo 9: Manutenção do Sistema ==
+Admin -> API: Desativa produtos
+API -> DB: Marca produtos como inativos
+Cliente -> Totem: Tenta selecionar produto inativo
+Totem -> API: GET /produtos
+API -> Totem: Retorna apenas produtos ativos
+Totem -> Cliente: Não exibe produtos inativos
+
+== Fluxo Alternativo 10: Recuperação de Erro ==
+note over API, DB: Sistema cai durante processamento
+API -> DB: Verifica transações pendentes
+API -> DB: Recupera estado consistente
+API -> Monitor: Restaura display
+API -> Totem: Restaura sessão do cliente
+
+@enduml 

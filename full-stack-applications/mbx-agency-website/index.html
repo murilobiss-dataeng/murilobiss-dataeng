@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBX Agency - Assessoria de Marketing Digital & Growth</title>
+    <meta name="description" content="MBX Agency - Assessoria especializada em marketing digital e growth hacking. Transformamos dados em resultados reais para empresas que querem crescer de verdade.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>MBX Agency</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#solucoes" class="nav-link">Soluções <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#estrategia">Estratégia & Growth</a></li>
+                            <li><a href="#performance">Performance Marketing</a></li>
+                            <li><a href="#web">Desenvolvimento Web</a></li>
+                            <li><a href="#automacao">Automação & CRM</a></li>
+                            <li><a href="#analytics">Analytics & Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#cases" class="nav-link">Cases</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#metodologia" class="nav-link">Metodologia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contato" class="nav-link">Contato</a>
+                    </li>
+                </ul>
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>Growth Marketing</span>
+                </div>
+                <h1 class="hero-title">
+                    Muito além de uma <span class="highlight">agência comum</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Se busca uma agência de marketing, descubra por que a <strong>assessoria da MBX Agency</strong> pode ser a melhor escolha para seu crescimento exponencial.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">+15</div>
+                        <div class="stat-label">empresas atendidas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">+20%</div>
+                        <div class="stat-label">aumento em receita</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">+3</div>
+                        <div class="stat-label">anos de mercado</div>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="openModal()">
+                        <i class="fas fa-calendar-check"></i>
+                        Agendar uma reunião
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('metodologia')">
+                        <i class="fas fa-play"></i>
+                        Como funciona
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-graphic">
+                    <div class="floating-card card-1">
+                        <i class="fas fa-chart-line"></i>
+                        <span>+180% ROI</span>
+                    </div>
+                    <div class="floating-card card-2">
+                        <i class="fas fa-users"></i>
+                        <span>+85% leads</span>
+                    </div>
+                    <div class="floating-card card-3">
+                        <i class="fas fa-trophy"></i>
+                        <span>Top 3 Google</span>
+                    </div>
+                    <div class="hero-illustration">
+                        <div class="growth-chart">
+                            <div class="chart-line"></div>
+                            <div class="chart-points">
+                                <div class="point"></div>
+                                <div class="point"></div>
+                                <div class="point"></div>
+                                <div class="point"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>Precisa de uma Agência? Conheça um modelo que gera mais resultados</h2>
+                <p>Nossa metodologia comprovada já transformou centenas de empresas</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Preencha o formulário</h3>
+                    <p>Envie suas informações de contato. Todos os seus dados estarão seguros, vamos cuidar bem deles.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Receba uma ligação</h3>
+                    <p>Um dos nossos especialistas fará uma ligação para agendar a reunião mais importante com você.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Diagnóstico gratuito</h3>
+                    <p>Analisamos seu negócio e criamos um plano personalizado para maximizar seus resultados.</p>
+                </div>
+            </div>
+            <div class="process-cta">
+                <button class="btn btn-primary btn-large" onclick="openModal()">
+                    <i class="fas fa-arrow-right"></i>
+                    Receber mais informações
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solucoes" class="solutions">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nós estruturamos o marketing da sua empresa com soluções feitas sob medida</h2>
+                <p>Conheça todos os serviços que oferecemos para que sua empresa tenha mais resultados</p>
+            </div>
+            <div class="solutions-grid">
+                <div class="solution-card" id="estrategia">
+                    <div class="solution-icon">
+                        <i class="fas fa-chess-king"></i>
+                    </div>
+                    <h3>Estratégia & Growth</h3>
+                    <p>Desenvolvemos estratégias baseadas em dados e performance para maximizar seu crescimento.</p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check"></i> Análise de mercado e concorrência</li>
+                        <li><i class="fas fa-check"></i> Definição de personas e jornadas</li>
+                        <li><i class="fas fa-check"></i> Roadmap estratégico personalizado</li>
+                        <li><i class="fas fa-check"></i> Growth hacking e otimização</li>
+                    </ul>
+                </div>
+                <div class="solution-card" id="performance">
+                    <div class="solution-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Performance Marketing</h3>
+                    <p>Gestão completa de campanhas com foco total em conversões e ROI positivo.</p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check"></i> Google Ads e Meta Ads</li>
+                        <li><i class="fas fa-check"></i> LinkedIn Ads e TikTok Ads</li>
+                        <li><i class="fas fa-check"></i> Remarketing e retargeting</li>
+                        <li><i class="fas fa-check"></i> Otimização contínua</li>
+                    </ul>
+                </div>
+                <div class="solution-card" id="web">
+                    <div class="solution-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Desenvolvimento Web</h3>
+                    <p>Sites e sistemas web modernos, responsivos e otimizados para conversão.</p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check"></i> Sites institucionais</li>
+                        <li><i class="fas fa-check"></i> Landing pages</li>
+                        <li><i class="fas fa-check"></i> Sites responsivos</li>
+                        <li><i class="fas fa-check"></i> Otimização SEO</li>
+                    </ul>
+                </div>
+                <div class="solution-card" id="automacao">
+                    <div class="solution-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Automação & CRM</h3>
+                    <p>Sistemas inteligentes para automatizar vendas e nutrir relacionamentos.</p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check"></i> Implementação de CRM</li>
+                        <li><i class="fas fa-check"></i> Automação de marketing</li>
+                        <li><i class="fas fa-check"></i> Funil de vendas otimizado</li>
+                        <li><i class="fas fa-check"></i> Nurturing de leads</li>
+                    </ul>
+                </div>
+                <div class="solution-card" id="analytics">
+                    <div class="solution-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Analytics & Data</h3>
+                    <p>Transformamos dados em insights acionáveis para decisões estratégicas.</p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check"></i> Dashboards personalizados</li>
+                        <li><i class="fas fa-check"></i> Análise de performance</li>
+                        <li><i class="fas fa-check"></i> Relatórios executivos</li>
+                        <li><i class="fas fa-check"></i> A/B testing e otimização</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="metodologia" class="methodology">
+        <div class="container">
+            <div class="section-header">
+                <h2>A Agência de Marketing que você está procurando precisa dominar o "ciclo de geração de receita"</h2>
+                <p>Nossa metodologia completa garante resultados consistentes e escaláveis</p>
+            </div>
+            <div class="methodology-cycle">
+                <div class="cycle-step">
+                    <div class="cycle-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Aquisição</h3>
+                    <p>Adquirir audiência qualificada através de estratégias multicanal</p>
+                </div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Engajamento</h3>
+                    <p>Construir confiança e interesse através de conteúdo relevante</p>
+                </div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3>Monetização</h3>
+                    <p>Realizar mais vendas de maior qualidade com otimização contínua</p>
+                </div>
+                <div class="cycle-step">
+                    <div class="cycle-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Retenção</h3>
+                    <p>Manter os clientes comprando através de estratégias de fidelização</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cases Section -->
+    <section id="cases" class="cases">
+        <div class="container">
+            <div class="section-header">
+                <h2>Cases de sucesso que comprovam nossa metodologia</h2>
+                <p>Empresas que transformaram seus resultados com a MBX Agency</p>
+            </div>
+            <div class="cases-grid">
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-number">+23%</div>
+                        <div class="case-label">Aumento em vendas</div>
+                    </div>
+                    <div class="case-content">
+                        <h3>Social Fit</h3>
+                        <p>Academia que implementou nossa estratégia completa de marketing digital e automação.</p>
+                        <div class="case-results">
+                            <span><i class="fas fa-chart-line"></i> +23% vendas</span>
+                            <span><i class="fas fa-users"></i> +45% leads</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-number">+120%</div>
+                        <div class="case-label">Crescimento orgânico</div>
+                    </div>
+                    <div class="case-content">
+                        <h3>Kerygma Fotos e Vídeos</h3>
+                        <p>Estúdio fotográfico que otimizou suas campanhas e estratégias de conteúdo.</p>
+                        <div class="case-results">
+                            <span><i class="fas fa-chart-line"></i> +120% orgânico</span>
+                            <span><i class="fas fa-users"></i> +45% conversões</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-number">-35%</div>
+                        <div class="case-label">Redução no CPA</div>
+                    </div>
+                    <div class="case-content">
+                        <h3>Luma Café</h3>
+                        <p>Cafeteria que implementou estratégias de marketing local e automação de vendas.</p>
+                        <div class="case-results">
+                            <span><i class="fas fa-chart-line"></i> -35% CPA</span>
+                            <span><i class="fas fa-users"></i> +75% leads</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ainda está buscando uma Agência de Marketing?</h2>
+                <p>Nossa Assessoria conta com especialistas certificados e metodologias comprovadas para impulsionar seu negócio</p>
+                <button class="btn btn-primary btn-large" onclick="openModal()">
+                    <i class="fas fa-calendar-check"></i>
+                    Agendar uma reunião
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MBX Agency</h3>
+                    <p>Assessoria especializada em marketing digital e growth hacking. Transformamos dados em resultados reais.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                                    <div class="footer-section">
+                        <h4>Soluções</h4>
+                        <ul>
+                            <li><a href="#estrategia">Estratégia & Growth</a></li>
+                            <li><a href="#performance">Performance Marketing</a></li>
+                            <li><a href="#web">Desenvolvimento Web</a></li>
+                            <li><a href="#automacao">Automação & CRM</a></li>
+                            <li><a href="#analytics">Analytics & Data</a></li>
+                        </ul>
+                    </div>
+                <div class="footer-section">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#sobre">Sobre nós</a></li>
+                        <li><a href="#cases">Cases</a></li>
+                        <li><a href="#metodologia">Metodologia</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> (41) 99835-8844</p>
+                        <p><i class="fas fa-envelope"></i> contato@mbxagency.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Curitiba, PR</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MBX Agency. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Vamos conversar sobre seu projeto?</h2>
+            <p>Preencha o formulário e nossa equipe entrará em contato em até 24 horas</p>
+            <form class="contact-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="Nome completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="E-mail corporativo" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" placeholder="WhatsApp">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="company" name="company" placeholder="Empresa">
+                </div>
+                <div class="form-group">
+                    <select id="service" name="service" required>
+                        <option value="">Selecione o serviço de interesse</option>
+                        <option value="estrategia">Estratégia & Growth</option>
+                        <option value="performance">Performance Marketing</option>
+                        <option value="web">Desenvolvimento Web</option>
+                        <option value="automacao">Automação & CRM</option>
+                        <option value="analytics">Analytics & Data</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" placeholder="Conte-nos sobre seu projeto e objetivos" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar mensagem
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js?v=1.1"></script>
+</body>
+</html> 
