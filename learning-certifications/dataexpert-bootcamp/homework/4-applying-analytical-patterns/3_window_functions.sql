@@ -1,8 +1,3 @@
--- Week 4: Window Functions Query
--- DataExpert Bootcamp - Data Engineering
--- Author: Murilo Biss
--- Date: December 2024
-
 -- Query using window functions for advanced analytics
 -- 1. Most games won in a 90-game stretch
 -- 2. LeBron James consecutive games with 10+ points

@@ -1,8 +1,3 @@
--- Week 4: GROUPING SETS Aggregation Query
--- DataExpert Bootcamp - Data Engineering
--- Author: Murilo Biss
--- Date: December 2024
-
 -- Query using GROUPING SETS for efficient aggregations
 -- Multi-dimensional analysis of game_details data
 

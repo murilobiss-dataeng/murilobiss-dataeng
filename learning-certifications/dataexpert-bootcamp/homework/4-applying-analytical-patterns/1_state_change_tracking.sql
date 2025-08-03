@@ -1,8 +1,3 @@
--- Week 4: State Change Tracking Query
--- DataExpert Bootcamp - Data Engineering
--- Author: Murilo Biss
--- Date: December 2024
-
 -- Query for state change tracking of players
 -- Tracks player career transitions using window functions
 
