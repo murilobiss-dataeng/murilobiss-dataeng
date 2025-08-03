@@ -14,7 +14,7 @@
 
 ## 🚀 Expertise
 
-**Data Engineer** with 5+ years experience specializing in cloud platforms, big data processing, and modern data architectures.
+**Data Engineer** with 6+ years experience specializing in cloud platforms, big data processing, and modern data architectures.
 
 **Core Technologies**: AWS, Azure, Snowflake • Apache Spark, Airflow, Kafka • dbt, Delta Lake • Python, SQL, JavaScript • Docker, Kubernetes
 
