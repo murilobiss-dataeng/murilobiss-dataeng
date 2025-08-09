@@ -1,0 +1,2 @@
+# This file ensures the curated data directory is tracked in git
+# Curated data files will be placed here during pipeline execution

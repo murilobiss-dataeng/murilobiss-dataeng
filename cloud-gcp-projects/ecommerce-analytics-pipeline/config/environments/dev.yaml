@@ -1,0 +1,213 @@
+# Development Environment Configuration
+# E-commerce Analytics Pipeline
+
+environment: "dev"
+gcp:
+  project_id: "your-dev-project-id"
+  region: "us-central1"
+  zone: "us-central1-a"
+  service_account_key_path: "config/credentials/dev-service-account.json"
+  use_default_credentials: false
+
+bigquery:
+  dataset_id: "ecommerce_analytics_dev"
+  project_id: "your-dev-project-id"
+  location: "US"
+  default_table_expiration_ms: 2592000000  # 30 days
+  clustering_fields: ["date", "customer_id", "product_id"]
+
+storage:
+  bucket_name: "ecommerce-analytics-dev-raw-data"
+  processed_bucket: "ecommerce-analytics-dev-processed"
+  curated_bucket: "ecommerce-analytics-dev-curated"
+  retention_days: 30
+  compression: "gzip"
+
+data_sources:
+  customer_orders:
+    type: "csv"
+    path: "data/raw/customer_orders.csv"
+    encoding: "utf-8"
+    delimiter: ","
+    header: true
+  
+  product_catalog:
+    type: "csv"
+    path: "data/raw/product_catalog.csv"
+    encoding: "utf-8"
+    delimiter: ","
+    header: true
+  
+  web_analytics:
+    type: "json"
+    path: "data/raw/web_analytics.json"
+    api_endpoint: "https://api.example.com/analytics"
+    api_key: "${WEB_ANALYTICS_API_KEY}"
+  
+  inventory:
+    type: "csv"
+    path: "data/raw/inventory.csv"
+    encoding: "utf-8"
+    delimiter: ","
+    header: true
+
+api_config:
+  timeout_seconds: 30
+  retry_attempts: 3
+  retry_delay_seconds: 5
+  rate_limit_per_minute: 100
+
+data_quality:
+  validation_rules:
+    customer_orders:
+      required_fields: ["order_id", "customer_id", "order_date", "total_amount"]
+      data_types:
+        order_id: "string"
+        customer_id: "string"
+        order_date: "datetime"
+        total_amount: "float"
+      constraints:
+        total_amount: ">= 0"
+        order_date: ">= 2020-01-01"
+    
+    product_catalog:
+      required_fields: ["product_id", "product_name", "category", "price"]
+      data_types:
+        product_id: "string"
+        product_name: "string"
+        category: "string"
+        price: "float"
+      constraints:
+        price: ">= 0"
+  
+  quality_threshold: 0.95
+  enable_auto_correction: true
+  log_quality_issues: true
+
+business_rules:
+  customer_segments:
+    high_value: "total_spent >= 1000"
+    medium_value: "total_spent >= 500 AND total_spent < 1000"
+    low_value: "total_spent < 500"
+  
+  product_categories:
+    electronics: ["laptop", "phone", "tablet", "accessories"]
+    clothing: ["shirt", "pants", "dress", "shoes"]
+    home: ["furniture", "decor", "kitchen", "garden"]
+  
+  revenue_calculations:
+    gross_revenue: "sum(total_amount)"
+    net_revenue: "sum(total_amount - discount_amount)"
+    average_order_value: "avg(total_amount)"
+
+aggregation:
+  time_periods:
+    - "daily"
+    - "weekly"
+    - "monthly"
+    - "quarterly"
+    - "yearly"
+  
+  customer_metrics:
+    - "total_orders"
+    - "total_spent"
+    - "average_order_value"
+    - "last_order_date"
+    - "customer_lifetime_value"
+  
+  product_metrics:
+    - "total_sold"
+    - "total_revenue"
+    - "average_rating"
+    - "inventory_turnover"
+
+loading:
+  bigquery_write_disposition: "WRITE_TRUNCATE"
+  storage_format: "parquet"
+  enable_partitioning: true
+  partition_field: "date"
+  clustering_enabled: true
+  
+  materialized_views:
+    refresh_interval_ms: 1800000  # 30 minutes
+    enable_auto_refresh: true
+
+pipeline:
+  log_level: "INFO"
+  enable_monitoring: true
+  enable_alerting: true
+  max_retries: 3
+  timeout_minutes: 60
+  
+  scheduling:
+    extraction_interval_minutes: 15
+    transformation_interval_minutes: 30
+    loading_interval_minutes: 45
+  
+  parallel_processing:
+    max_workers: 4
+    chunk_size: 1000
+    enable_streaming: true
+
+monitoring:
+  cloud_monitoring:
+    enabled: true
+    project_id: "your-dev-project-id"
+    custom_metrics: true
+  
+  alerting:
+    enabled: true
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+    email_recipients: ["dev-team@company.com"]
+    
+    rules:
+      - name: "Pipeline Failure"
+        condition: "status == 'failed'"
+        severity: "critical"
+        description: "ETL pipeline execution failed"
+      
+      - name: "Data Quality Below Threshold"
+        condition: "quality_score < 0.95"
+        severity: "warning"
+        description: "Data quality score below acceptable threshold"
+      
+      - name: "High Error Rate"
+        condition: "error_rate > 0.05"
+        severity: "error"
+        description: "Error rate exceeds 5% threshold"
+  
+  health_checks:
+    enabled: true
+    check_interval_minutes: 15
+    timeout_seconds: 30
+
+security:
+  encryption:
+    at_rest: true
+    in_transit: true
+  
+  access_control:
+    principle_of_least_privilege: true
+    service_account_rotation_days: 90
+  
+  audit_logging:
+    enabled: true
+    log_level: "INFO"
+    retention_days: 365
+
+testing:
+  unit_tests:
+    enabled: true
+    coverage_threshold: 0.80
+  
+  integration_tests:
+    enabled: true
+    test_data_size: "small"
+  
+  data_quality_tests:
+    enabled: true
+    sample_size: 1000
+  
+  performance_tests:
+    enabled: true
+    timeout_seconds: 300
